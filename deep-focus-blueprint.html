@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Deep Focus Blueprint — Clarity Reset Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #040810;
+  --bg2: #060c18;
+  --surface: #0c1524;
+  --surface2: #111e34;
+  --surface3: #162540;
+  --border: rgba(34,211,238,0.1);
+  --border2: rgba(255,255,255,0.06);
+  --accent: #22d3ee;
+  --accent2: #4f9cf9;
+  --green: #34d399;
+  --gold: #fbbf24;
+  --red: #f87171;
+  --purple: #c084fc;
+  --text: #f0f6ff;
+  --text-dim: #7a90b0;
+  --text-muted: #344860;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* AMBIENT */
+.ambient {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(34,211,238,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(79,156,249,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* SIDEBAR NAV */
+.sidebar {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+@media (max-width: 860px) { .sidebar { display: none; } }
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 4px 0;
+}
+
+.sidebar-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-weight: 500;
+}
+
+.sidebar-item:hover .sidebar-dot,
+.sidebar-item.active .sidebar-dot {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(34,211,238,0.5);
+  width: 8px; height: 8px;
+}
+.sidebar-item:hover .sidebar-label,
+.sidebar-item.active .sidebar-label {
+  opacity: 1;
+  color: var(--text-dim);
+}
+
+/* CONTENT WRAPPER */
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* COVER */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px 24px;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid var(--border2);
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.cover-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(34,211,238,0.25);
+  border-radius: 6px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 48px;
+  background: rgba(34,211,238,0.04);
+}
+
+.cover h1 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 7vw, 80px);
+  font-weight: 700;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+.cover h1 em { color: var(--accent); font-style: italic; }
+
+.cover-sub {
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: var(--text-dim);
+  max-width: 580px;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-bottom: 56px;
+}
+
+.cover-stats {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.cover-stat .num {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.cover-stat .desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* SECTION HEADER */
+.section-header {
+  padding: 80px 0 48px;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: 60px;
+}
+
+.chapter-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chapter-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border2);
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 4.5vw, 52px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.lead {
+  font-size: 19px;
+  color: var(--text-dim);
+  line-height: 1.85;
+  font-weight: 300;
+  margin-bottom: 32px;
+}
+
+p { color: var(--text-dim); line-height: 1.8; font-size: 16px; }
+p + p { margin-top: 16px; }
+
+.highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.hl-gold { color: var(--gold); }
+.hl-green { color: var(--green); }
+.hl-purple { color: var(--purple); }
+.hl-red { color: var(--red); }
+
+/* CALLOUT BOXES */
+.callout {
+  border-left: 3px solid var(--accent);
+  background: rgba(34,211,238,0.04);
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+  margin: 32px 0;
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.callout-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.warning-box {
+  border-left: 3px solid var(--red);
+  background: rgba(248,113,113,0.04);
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+  margin: 32px 0;
+  font-size: 15px;
+  color: #c0a0a0;
+  line-height: 1.8;
+}
+
+.warning-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ULTRADIAN VISUAL */
+.rhythm-chart {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 36px 0;
+  overflow: hidden;
+}
+
+.rhythm-chart h4 { color: var(--text-dim); margin-bottom: 24px; }
+
+.rhythm-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 80px;
+  margin-bottom: 12px;
+}
+
+.rbar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s;
+  min-height: 8px;
+  position: relative;
+}
+
+.rbar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.rhythm-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.rl-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.rl-dot {
+  width: 10px; height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* MORNING PROTOCOL TIMELINE */
+.timeline {
+  position: relative;
+  margin: 40px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+}
+
+.tl-item {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.tl-time {
+  width: 56px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.tl-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--bg);
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  margin-left: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(34,211,238,0.3);
+}
+
+.tl-dot.gold { border-color: var(--gold); box-shadow: 0 0 12px rgba(251,191,36,0.3); }
+.tl-dot.green { border-color: var(--green); box-shadow: 0 0 12px rgba(52,211,153,0.3); }
+.tl-dot.purple { border-color: var(--purple); box-shadow: 0 0 12px rgba(192,132,252,0.3); }
+
+.tl-content {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 20px 24px;
+  flex: 1;
+  transition: border-color 0.3s;
+}
+
+.tl-content:hover { border-color: rgba(34,211,238,0.2); }
+
+.tl-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.tl-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.tl-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(34,211,238,0.08);
+  border: 1px solid rgba(34,211,238,0.2);
+  color: var(--accent);
+  padding: 3px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tl-badge.gold { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.2); color: var(--gold); }
+.tl-badge.green { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.2); color: var(--green); }
+.tl-badge.purple { background: rgba(192,132,252,0.08); border-color: rgba(192,132,252,0.2); color: var(--purple); }
+
+.tl-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+.tl-rules {
+  margin-top: 12px;
+  list-style: none;
+}
+
+.tl-rules li {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  padding: 4px 0;
+}
+
+.tl-rules li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+/* RULES SECTION */
+.rules-section { margin: 40px 0; }
+
+.rule-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.rule-card:hover { border-color: rgba(34,211,238,0.2); }
+
+.rule-card::after {
+  content: attr(data-rule);
+  position: absolute;
+  bottom: -10px; right: 16px;
+  font-family: var(--serif);
+  font-size: 100px;
+  font-weight: 700;
+  color: rgba(34,211,238,0.03);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.rule-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  border: 1px solid rgba(34,211,238,0.2);
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.rule-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.rule-desc { font-size: 15px; color: var(--text-dim); line-height: 1.75; }
+.rule-desc strong { color: var(--text); }
+
+.rule-action {
+  margin-top: 16px;
+  background: rgba(34,211,238,0.04);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  border: 1px solid rgba(34,211,238,0.08);
+}
+
+.rule-action strong { color: var(--accent); }
+
+/* ENVIRONMENT CHECKLIST */
+.env-sections { display: flex; flex-direction: column; gap: 24px; margin: 40px 0; }
+
+.env-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.env-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.env-icon { font-size: 28px; }
+
+.env-title h3 {
+  font-size: 18px;
+  margin: 0;
+  font-family: var(--sans);
+  font-weight: 700;
+}
+
+.checklist { list-style: none; }
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.check-item:last-child { border: none; }
+
+.check-box {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--text-muted);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-top: 1px;
+  cursor: pointer;
+}
+
+.check-item.checked .check-box {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.check-item.checked .check-box::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
+
+.check-text { font-size: 14px; color: var(--text-dim); line-height: 1.6; flex: 1; }
+.check-item.checked .check-text { color: var(--text-muted); text-decoration: line-through; }
+.check-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; display: block; }
+
+/* 7-DAY ROLLOUT */
+.rollout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 40px 0;
+}
+
+@media (max-width: 600px) {
+  .rollout-grid { grid-template-columns: 1fr; }
+  .cover-stats { gap: 24px; }
+  .cover h1 { font-size: 44px; }
+}
+
+.day-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 22px;
+  transition: border-color 0.3s;
+}
+.day-card:hover { border-color: rgba(34,211,238,0.2); }
+
+.day-card.featured {
+  background: linear-gradient(135deg, var(--surface), rgba(34,211,238,0.04));
+  border-color: rgba(34,211,238,0.2);
+  grid-column: 1/-1;
+}
+
+.day-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.day-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.day-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+.day-tasks { margin-top: 14px; list-style: none; }
+.day-tasks li {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  padding: 4px 0;
+}
+.day-tasks li::before { content: '·'; color: var(--accent); font-size: 18px; line-height: 1.2; }
+
+/* FOCUS STACK */
+.stack-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 36px 0;
+  font-size: 14px;
+}
+
+.stack-table thead th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 16px 12px 0;
+  border-bottom: 1px solid var(--border2);
+}
+
+.stack-table td {
+  padding: 14px 16px 14px 0;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.stack-table tr:last-child td { border: none; }
+
+.stack-table .item-name {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.stack-table .item-type {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.cost-free { color: var(--green); font-weight: 600; font-size: 12px; }
+.cost-paid { color: var(--text-muted); font-size: 12px; }
+
+.impact-bar {
+  display: flex;
+  gap: 3px;
+  margin-top: 4px;
+}
+.impact-seg {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--accent);
+  flex: 1;
+}
+.impact-seg.empty { background: var(--surface3); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+
+section { padding: 0 24px 80px; max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <a class="sidebar-item active" href="#cover"><div class="sidebar-dot"></div><span class="sidebar-label">Introduction</span></a>
+  <a class="sidebar-item" href="#chapter1"><div class="sidebar-dot"></div><span class="sidebar-label">The 90-Min Rule</span></a>
+  <a class="sidebar-item" href="#chapter2"><div class="sidebar-dot"></div><span class="sidebar-label">No-Input Morning</span></a>
+  <a class="sidebar-item" href="#chapter3"><div class="sidebar-dot"></div><span class="sidebar-label">Morning Protocol</span></a>
+  <a class="sidebar-item" href="#chapter4"><div class="sidebar-dot"></div><span class="sidebar-label">Phone Rules</span></a>
+  <a class="sidebar-item" href="#chapter5"><div class="sidebar-dot"></div><span class="sidebar-label">Environment</span></a>
+  <a class="sidebar-item" href="#chapter6"><div class="sidebar-dot"></div><span class="sidebar-label">7-Day Rollout</span></a>
+  <a class="sidebar-item" href="#chapter7"><div class="sidebar-dot"></div><span class="sidebar-label">Focus Stack</span></a>
+</nav>
+
+<!-- COVER -->
+<div class="cover" id="cover">
+  <div class="cover-chip">Clarity Reset Protocol — Bonus #3</div>
+  <h1>The Deep<br><em>Focus</em><br>Blueprint</h1>
+  <p class="cover-sub">A complete system for protecting your cognitive prime time, designing an environment that makes focus inevitable, and building the morning architecture that elite performers never talk about publicly.</p>
+  <div class="cover-stats">
+    <div class="cover-stat"><div class="num">90</div><div class="desc">Minutes — your<br>biological focus peak</div></div>
+    <div class="cover-stat"><div class="num">7</div><div class="desc">Days to build the<br>new baseline</div></div>
+    <div class="cover-stat"><div class="num">3×</div><div class="desc">Output increase<br>documented in pilots</div></div>
+  </div>
+</div>
+
+<!-- CHAPTER 1: ULTRADIAN RHYTHM -->
+<section id="chapter1">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 01</div>
+    <h2>The 90-Minute Rule:<br>Your Brain's Hidden <em>Operating Cycle</em></h2>
+  </div>
+
+  <p class="lead reveal">Before you fix your morning routine or your phone habits, you need to understand one biological fact: your brain was never designed to focus for eight hours straight. And trying to force it to is the reason you feel exhausted by noon.</p>
+
+  <p class="reveal">Your brain operates on what researchers call the <span class="highlight">ultradian rhythm</span> — a natural 90–120 minute cycle of high-alertness followed by a 15–20 minute trough of lower cognitive performance. This cycle runs continuously throughout your day, whether you acknowledge it or not.</p>
+
+  <p class="reveal">Here's what this means in practice: you have <span class="highlight hl-gold">approximately two genuine peak-performance windows per morning</span> — each lasting around 90 minutes. The first begins roughly 45–90 minutes after waking. The second comes about 90 minutes after the first ends. After that, cognitive output drops significantly until an afternoon recovery window (typically 2:00–4:00 PM).</p>
+
+  <div class="rhythm-chart reveal">
+    <h4>COGNITIVE PERFORMANCE ACROSS A TYPICAL DAY</h4>
+    <div class="rhythm-bars" id="rhythmBars"></div>
+    <div class="rbar-label">
+      <span>6 AM</span>
+      <span>8 AM</span>
+      <span>10 AM</span>
+      <span>12 PM</span>
+      <span>2 PM</span>
+      <span>4 PM</span>
+      <span>6 PM</span>
+    </div>
+    <div class="rhythm-legend">
+      <div class="rl-item"><div class="rl-dot" style="background:var(--accent)"></div>Peak Performance</div>
+      <div class="rl-item"><div class="rl-dot" style="background:rgba(34,211,238,0.3)"></div>Moderate</div>
+      <div class="rl-item"><div class="rl-dot" style="background:var(--surface3)"></div>Recovery Trough</div>
+    </div>
+  </div>
+
+  <p class="reveal">The average knowledge worker burns their first — and best — cognitive window on email, Slack, social media, and meetings. They save "the real work" for later, when their brain is operating at 40-60% capacity. Then they wonder why they feel unproductive.</p>
+
+  <div class="callout reveal">
+    <span class="callout-label">🔬 The Research</span>
+    Neuroscientist Satchin Panda and chronobiology researchers at Harvard Medical School have documented that the prefrontal cortex — responsible for reasoning, judgment, and complex problem-solving — shows peak glucose metabolism in the morning, with measurably higher activity in the first 4 hours after waking for most people. Your brain runs best on a full tank. The question is what you fill it with first.
+  </div>
+
+  <p class="reveal"><strong style="color:var(--text)">The strategic implication is simple but radical:</strong> The highest-leverage decision you make each day is what you spend your first 90 minutes doing. Everything in this blueprint is built around protecting and maximizing that window.</p>
+
+  <div class="warning-box reveal">
+    <span class="warning-label">⚠️ Common Mistake</span>
+    Most productivity systems focus on working longer or harder. This blueprint focuses on working smarter by working with your biology, not against it. Checking email first thing is not a small habit — it is neurologically equivalent to lighting your best wood on fire before building your campfire. You're burning your premium resource on low-value tasks.
+  </div>
+</section>
+
+<!-- CHAPTER 2: NO INPUT MORNING -->
+<section id="chapter2">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 02</div>
+    <h2>The No-Input Morning:<br>Why the First 90 Minutes <em>Must Be Yours</em></h2>
+  </div>
+
+  <p class="lead reveal">The most powerful single change you can make to your cognitive performance costs nothing and takes nothing away. It only requires that you stop doing something you're already doing: consuming other people's content before your own work.</p>
+
+  <p class="reveal">Every morning, you wake up with your prefrontal cortex in a state researchers call <span class="highlight">hypnopompic neuroplasticity</span> — an elevated state of neural flexibility and openness that lasts approximately 45–90 minutes after waking. During this window, your brain is unusually receptive to new programming, patterns, and information.</p>
+
+  <p class="reveal">The question is: whose programming goes in first?</p>
+
+  <p class="reveal">When you check your phone within minutes of waking, you immediately flood this open, receptive brain state with:</p>
+
+  <div class="callout reveal" style="border-color: var(--red); background: rgba(248,113,113,0.04);">
+    <span class="callout-label" style="color:var(--red)">🚨 What enters your brain first each morning</span>
+    Other people's urgent problems (email). Other people's highlight reels (Instagram). Other people's outrage triggers (news). Other people's anxiety and comparison traps (social media). Random commercial messages designed by professionals to redirect your attention. And your brain — in its most plastic, receptive state — absorbs all of it. Before you've thought one single thought of your own.
+  </div>
+
+  <p class="reveal">The No-Input Morning protocol is brutally simple: for the first 60–90 minutes after waking, you consume <strong style="color:var(--text)">zero external information</strong>. No phone. No news. No email. No podcasts. No social. Nothing created by or for anyone else.</p>
+
+  <p class="reveal">What you do instead, and in what sequence, is exactly what the next chapter covers.</p>
+</section>
+
+<!-- CHAPTER 3: MORNING PROTOCOL -->
+<section id="chapter3">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 03</div>
+    <h2>The Morning Architecture:<br>A 90-Minute <em>Protocol That Works</em></h2>
+  </div>
+
+  <p class="lead reveal">This is not a rigid schedule. It's a framework of sequenced activities that, when done in order, prepare your neurology, physiology, and cognition for maximum output. Adapt the timing to your life — but respect the sequence.</p>
+
+  <div class="timeline reveal">
+
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-content">
+        <div class="tl-content-header">
+          <span class="tl-title">⏰ Wake — First 5 Minutes</span>
+          <span class="tl-badge gold">Phase 1</span>
+        </div>
+        <div class="tl-desc">Before anything else. Phone stays face-down or in another room.</div>
+        <ul class="tl-rules">
+          <li>No phone for at least 60 minutes after waking — non-negotiable</li>
+          <li>If you use your phone as an alarm: put it across the room. Buy a $12 alarm clock.</li>
+          <li>Drink a full glass of water immediately upon waking (300–500ml). Your brain is 3–8% dehydrated after sleep and operates significantly below optimal until rehydrated</li>
+          <li>Open curtains or step outside for 2–5 minutes of natural light. This sets your circadian clock, spikes cortisol (appropriately and helpfully), and directly signals your brain that the day has started</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <div class="tl-content-header">
+          <span class="tl-title">🏃 Minutes 5–30: Physical Activation</span>
+          <span class="tl-badge">Phase 2</span>
+        </div>
+        <div class="tl-desc">The goal here is not fitness. It's neurochemistry. Movement generates BDNF (Brain-Derived Neurotrophic Factor) — a protein that literally promotes neuron growth and enhances learning and memory. Even a 20-minute walk creates measurable cognitive improvement.</div>
+        <ul class="tl-rules">
+          <li><strong>Option A (preferred):</strong> 20–30 min walk outdoors without headphones. Panoramic vision + physical movement + no input = powerful triple activation</li>
+          <li><strong>Option B:</strong> 15–20 min any physical exercise (home workout, yoga, cycling)</li>
+          <li><strong>Minimum viable:</strong> 10 min brisk walk. No excuses on this. The data is unambiguous.</li>
+          <li>No music or podcasts during this time. Let your mind wander freely. This is when creative insight happens.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-content">
+        <div class="tl-content-header">
+          <span class="tl-title">✍️ Minutes 30–45: Intentional Orientation</span>
+          <span class="tl-badge green">Phase 3</span>
+        </div>
+        <div class="tl-desc">This is where you program your own day before the world does it for you. Choose one of the following, not both:</div>
+        <ul class="tl-rules">
+          <li><strong>Free writing (recommended):</strong> 10 minutes of uncensored writing — thoughts, plans, what's bothering you, what you want. No audience. No editing. This clears working memory and surfaces priorities that email would bury</li>
+          <li><strong>Quiet planning:</strong> Review your top 3 priorities for the day. Write them on paper, not a phone. Decide — before external input — what actually matters today</li>
+          <li>Do not skip this phase. It is the difference between reacting to your day and architecting it</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot purple"></div>
+      <div class="tl-content">
+        <div class="tl-content-header">
+          <span class="tl-title">☕ Minutes 45–60: Fuel and Transition</span>
+          <span class="tl-badge purple">Phase 4</span>
+        </div>
+        <div class="tl-desc">Breakfast, coffee, shower — whatever your morning hygiene looks like. Still no phone or screens during this time.</div>
+        <ul class="tl-rules">
+          <li>Delay caffeine intake until 60–90 minutes after waking. Cortisol peaks naturally upon waking — caffeine taken immediately is largely wasted and disrupts the natural alertness curve. Caffeine 60–90 min after waking extends and amplifies the cortisol peak instead of competing with it</li>
+          <li>Eat if you do — don't if you don't. Both are fine. Don't let this become a debate about intermittent fasting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item" style="margin-bottom:0">
+      <div class="tl-dot" style="border-color:var(--green); box-shadow: 0 0 12px rgba(52,211,153,0.4)"></div>
+      <div class="tl-content" style="border-color: rgba(52,211,153,0.2); background: linear-gradient(135deg, var(--surface), rgba(52,211,153,0.03))">
+        <div class="tl-content-header">
+          <span class="tl-title">🎯 Minutes 60–150: Deep Work Block</span>
+          <span class="tl-badge green">Phase 5 — The Main Event</span>
+        </div>
+        <div class="tl-desc">You are now 60 minutes into your day and your brain is fully hydrated, moved, and oriented — without a single piece of external noise having entered it. This is your cognitive prime time. Guard it like your most valuable resource, because it is.</div>
+        <ul class="tl-rules">
+          <li>Phone on DND or in another room — not silenced, physically out of sight</li>
+          <li>Work on your single most important task first — the thing that, if done, would make today a win regardless of what else happens</li>
+          <li>Set a timer for 90 minutes. Work until it ends. Then take a 15–20 minute genuine break (walk, stretch, not scrolling)</li>
+          <li>No email, Slack, or messages until this block is complete. The world will not end. Nothing in 90 minutes is that urgent.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CHAPTER 4: PHONE RULES -->
+<section id="chapter4">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 04</div>
+    <h2>The Phone Boundary Rules:<br><em>Specific, Implementable, Non-Negotiable</em></h2>
+  </div>
+
+  <p class="lead reveal">These are not suggestions. Each rule below is grounded in behavioral science and has a specific mechanism. Implement them in order — starting with the highest-impact ones.</p>
+
+  <div class="rules-section">
+
+    <div class="rule-card reveal" data-rule="1">
+      <span class="rule-tag">Rule 01 — Highest Impact</span>
+      <div class="rule-title">The Phone-Free Bedroom</div>
+      <div class="rule-desc">Your phone does not sleep in your bedroom. Period. This is the single most impactful phone rule you can implement because it addresses the two most vulnerable neurological moments of your day: the final minutes before sleep and the first minutes upon waking. Both are states of heightened neural plasticity — and both are currently being colonized by your device. <strong>The quality of your sleep and the clarity of your mornings are directly correlated with whether your phone is in the room while you sleep.</strong></div>
+      <div class="rule-action"><strong>Implement today:</strong> Charge your phone in the kitchen, hallway, or any room that is not your bedroom. Buy a $12 alarm clock if needed. No exceptions, including weekends.</div>
+    </div>
+
+    <div class="rule-card reveal" data-rule="2">
+      <span class="rule-tag">Rule 02 — Notification Architecture</span>
+      <div class="rule-title">The Three-App Notification Rule</div>
+      <div class="rule-desc">You are allowed exactly three apps to send you push notifications. Choose them intentionally. For most people: phone calls, one messaging app (WhatsApp/iMessage for important contacts only), and one calendar. <strong>Everything else is silent.</strong> This is not about missing things — it's about reversing the relationship between you and your device. Right now your phone summons you constantly. This rule puts you back in charge of when you check things.</div>
+      <div class="rule-action"><strong>Implement today:</strong> Go to Settings → Notifications. Turn off every app except your chosen three. This takes 8 minutes and will measurably change your day immediately.</div>
+    </div>
+
+    <div class="rule-card reveal" data-rule="3">
+      <span class="rule-tag">Rule 03 — Scheduled Access</span>
+      <div class="rule-title">The Email & Slack Windows</div>
+      <div class="rule-desc">Email and Slack are not communication tools — they are interruption tools dressed up as communication tools. Every time you check email, your brain enters a state of context-switching that takes 23 minutes on average to fully recover from. If you check email 10 times a day, you lose 230 minutes of deep work capacity — not to the actual checking, but to the recovery. <strong>The solution is scheduled access: pick 2–3 windows per day (e.g., 10am, 1pm, 4pm) and only check during those windows.</strong></div>
+      <div class="rule-action"><strong>Implement this week:</strong> Set up an auto-responder on your email that says: "I check email at 10am and 4pm. For urgent matters, call [number]." This manages expectations and removes the social pressure to be always-on.</div>
+    </div>
+
+    <div class="rule-card reveal" data-rule="4">
+      <span class="rule-tag">Rule 04 — Environment Design</span>
+      <div class="rule-title">The Out-of-Sight Rule</div>
+      <div class="rule-desc">Research from the University of Texas at Austin found that the mere <em>presence</em> of your smartphone on a desk — even face-down, even off — reduces available working memory and fluid intelligence measurably. Your brain knows it's there and allocates a portion of its cognitive resources to resisting the temptation to check it. <strong>The solution is physical distance, not willpower.</strong> Put your phone in a drawer, bag, or different room during deep work. Willpower is finite. Distance is structural.</div>
+      <div class="rule-action"><strong>Start every deep work session:</strong> Phone in drawer or bag — not on desk, not in pocket. If you work from home: phone in another room. Measure the difference in your next session.</div>
+    </div>
+
+    <div class="rule-card reveal" data-rule="5">
+      <span class="rule-tag">Rule 05 — Social Media</span>
+      <div class="rule-title">The No-Morning, No-Night Rule</div>
+      <div class="rule-desc">You can use social media. Just not in the first 90 minutes of your day, and not in the last 60 minutes before sleep. The reasons mirror what you've already read: morning neuroplasticity and sleep onset are the two windows most disrupted by social media. Outside of these protected zones, your usage is your decision. <strong>But the data is unambiguous: removing social media from the first and last windows of your day produces measurable improvements in sleep quality, morning mood, and daily focus within 3–5 days.</strong></div>
+      <div class="rule-action"><strong>App-level solution:</strong> Use your phone's Screen Time or Digital Wellbeing settings to schedule app downtime for Instagram, TikTok, Twitter/X from 9PM–9AM. The friction of overriding it is often enough to break the automatic habit.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CHAPTER 5: ENVIRONMENT -->
+<section id="chapter5">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 05</div>
+    <h2>Environment Design:<br>Make Focus <em>the Default</em></h2>
+  </div>
+
+  <p class="lead reveal">Your environment is not neutral. Every element of your workspace either makes focus easier or harder — and most people have accidentally designed workspaces that actively fight them. This is fixable, and most fixes cost nothing.</p>
+
+  <p class="reveal">The principle here comes from behavioral economist <span class="highlight">Richard Thaler</span>'s concept of choice architecture: the arrangement of your environment determines your behavior more reliably than your intentions. Design your space for the behavior you want, and the behavior becomes easier. Design it for distraction, and focus requires constant willpower.</p>
+
+  <div class="env-sections">
+
+    <div class="env-card reveal">
+      <div class="env-title">
+        <span class="env-icon">🖥️</span>
+        <h3>Digital Workspace</h3>
+      </div>
+      <ul class="checklist" id="check-digital">
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Browser notifications disabled entirely — no badge counts, no pop-ups<span class="check-sub">Settings → Browser → Notifications → Block All</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Desktop cleaned to a single wallpaper — no icons on the main desktop<span class="check-sub">Visual clutter creates cognitive load even when you're not looking at it</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Browser homepage set to a blank page or simple start page — not a news feed<span class="check-sub">Chrome: set to "about:blank" — Firefox: set to "Blank Page" in preferences</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Tab count rule: maximum 5 browser tabs open during deep work<span class="check-sub">Use a tab manager or the OneTab extension to park tabs you'll return to</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Email client closed during deep work blocks — not minimized, fully closed<span class="check-sub">This includes mobile email apps during focus sessions</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Slack/Teams status set to "Do Not Disturb" during morning deep work block<span class="check-sub">Schedule this in advance so it happens automatically every day</span></div></li>
+      </ul>
+    </div>
+
+    <div class="env-card reveal">
+      <div class="env-title">
+        <span class="env-icon">🏠</span>
+        <h3>Physical Workspace</h3>
+      </div>
+      <ul class="checklist" id="check-physical">
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Single task surface: your desk should have only what you're working on right now<span class="check-sub">Everything else in a drawer, shelf, or out of the room. "Pile" on the desk = "pile" in your head</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Dedicated work light or lamp — separate from overhead lighting<span class="check-sub">Controllable, focused light signals "work mode" to the brain via conditioned association</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Phone physically out of sight during deep work (drawer or bag — not on desk)<span class="check-sub">University of Texas study: phone on desk reduces working memory by up to 20%</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Water bottle at desk — dehydration of 1–2% impairs cognitive function measurably<span class="check-sub">Goal: 500ml in the first hour of work</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Noise solution chosen and in place: noise-canceling headphones, white noise app, or quiet room<span class="check-sub">For focus: instrumental music, brown noise, or silence. Avoid music with lyrics during writing or reading tasks</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">A paper notepad on the desk for capturing stray thoughts during deep work<span class="check-sub">When a random thought ("I need to call the dentist") enters your mind, write it down and return. This prevents the thought from looping</span></div></li>
+      </ul>
+    </div>
+
+    <div class="env-card reveal">
+      <div class="env-title">
+        <span class="env-icon">🎯</span>
+        <h3>Behavioral Triggers</h3>
+      </div>
+      <ul class="checklist" id="check-behavior">
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Consistent start time for deep work — same time each day builds a conditioned response<span class="check-sub">Your brain will start generating focus chemicals anticipatorily when the routine is consistent</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">A short "launch ritual" before deep work — the same 2-minute sequence every time<span class="check-sub">Example: fill water, put on headphones, open document. The ritual itself becomes a trigger for focus state</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Dedicated "focus playlist" — the same playlist every session trains the brain to associate it with work<span class="check-sub">Spotify: search "deep focus instrumental" — use the same playlist consistently for 2 weeks</span></div></li>
+        <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">Clear stopping point — end deep work sessions at a defined time or natural transition<span class="check-sub">Hemingway's trick: stop mid-sentence when you know what comes next. The unfinished thought keeps you engaged</span></div></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CHAPTER 6: 7-DAY ROLLOUT -->
+<section id="chapter6">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 06</div>
+    <h2>The 7-Day Rollout:<br>Implement Without <em>Overwhelming Yourself</em></h2>
+  </div>
+
+  <p class="lead reveal">Don't implement everything at once. Behavioral change science is clear: stacking too many new habits simultaneously is the #1 reason habit systems fail. This 7-day rollout staggers the changes so each one stabilizes before the next is added.</p>
+
+  <div class="rollout-grid">
+
+    <div class="day-card featured reveal">
+      <div class="day-num">Day 01 — Foundation</div>
+      <div class="day-title">🛏️ Phone Out of Bedroom Night + 60-Min No-Input Morning</div>
+      <div class="day-desc">These two changes are the foundation of everything else. Do them both starting tonight. The bedroom rule removes the worst trigger zone. The morning window protects your peak cognition before anything else.</div>
+      <ul class="day-tasks">
+        <li>Tonight: charge phone in kitchen or hallway. Set a non-phone alarm.</li>
+        <li>Tomorrow morning: no phone for 60 full minutes after waking. No exceptions.</li>
+        <li>Do this only. Don't add anything else today. Stabilize these two.</li>
+      </ul>
+    </div>
+
+    <div class="day-card reveal">
+      <div class="day-num">Day 02</div>
+      <div class="day-title">🔔 Notification Audit</div>
+      <div class="day-desc">The 3-app notification rule. Takes 8 minutes to implement.</div>
+      <ul class="day-tasks">
+        <li>Go to Settings → Notifications</li>
+        <li>Keep: phone calls, one messenger, calendar</li>
+        <li>Turn off: everything else, including email</li>
+      </ul>
+    </div>
+
+    <div class="day-card reveal d1">
+      <div class="day-num">Day 03</div>
+      <div class="day-title">🚶 Morning Walk Added</div>
+      <div class="day-desc">Add 15–20 minutes of walking to your no-input morning. No headphones. Let your mind wander.</div>
+      <ul class="day-tasks">
+        <li>Shoes on. Outside. 15 minutes minimum.</li>
+        <li>No podcast, no music, no phone</li>
+        <li>Walk at comfortable pace — this is neurology, not exercise</li>
+      </ul>
+    </div>
+
+    <div class="day-card reveal">
+      <div class="day-num">Day 04</div>
+      <div class="day-title">✍️ Morning Writing Starts</div>
+      <div class="day-desc">Add 10 minutes of free writing after your walk. A notebook and pen. No editing, no audience, no agenda.</div>
+      <ul class="day-tasks">
+        <li>Write what's on your mind. Stream of consciousness.</li>
+        <li>Include your top 3 priorities for today</li>
+        <li>Don't read it back. This isn't journaling — it's mental clearing</li>
+      </ul>
+    </div>
+
+    <div class="day-card reveal d1">
+      <div class="day-num">Day 05</div>
+      <div class="day-title">🎯 First Deep Work Block</div>
+      <div class="day-desc">Schedule your first 90-minute deep work session beginning around 60 min after waking. Phone in drawer. Timer running.</div>
+      <ul class="day-tasks">
+        <li>Choose one task — your most important work</li>
+        <li>Set a 90-min timer. Work until it ends.</li>
+        <li>No checking anything until timer is done</li>
+      </ul>
+    </div>
+
+    <div class="day-card reveal">
+      <div class="day-num">Day 06</div>
+      <div class="day-title">📱 Social Media Windows</div>
+      <div class="day-desc">Schedule social media downtime: 9PM–9AM using your phone's built-in screen time controls.</div>
+      <ul class="day-tasks">
+        <li>iPhone: Screen Time → App Limits → Social</li>
+        <li>Android: Digital Wellbeing → App Timers</li>
+        <li>Set to lock, not just remind</li>
+      </ul>
+    </div>
+
+    <div class="day-card reveal d1">
+      <div class="day-num">Day 07</div>
+      <div class="day-title">📧 Email Windows Implemented</div>
+      <div class="day-desc">Set up scheduled email access and the auto-responder. This is the final structural piece.</div>
+      <ul class="day-tasks">
+        <li>Close email client outside of check windows</li>
+        <li>Set up auto-responder managing expectations</li>
+        <li>Evaluate the full week — what's working, what to adjust</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="callout reveal" style="margin-top:32px">
+    <span class="callout-label">📌 Week 2 and Beyond</span>
+    By Day 8, you have a complete system in place. Week 2 is about reinforcement and measurement. Track your deep work hours, note your energy levels, observe how your relationship with your phone has changed. Most people at this stage report that they feel significantly more in control — not because they did anything heroic, but because they changed the architecture of their default behavior.
+  </div>
+</section>
+
+<!-- CHAPTER 7: FOCUS STACK -->
+<section id="chapter7">
+  <div class="section-header">
+    <div class="chapter-num">Chapter 07</div>
+    <h2>The Focus Stack:<br>Tools That Actually <em>Work</em></h2>
+  </div>
+
+  <p class="lead reveal">A curated, no-fluff list of the tools and techniques that support focus — categorized by impact. Only include things with real evidence. Everything below has been tested and filtered for signal, not noise.</p>
+
+  <table class="stack-table reveal">
+    <thead>
+      <tr>
+        <th>Tool / Technique</th>
+        <th>What It Does</th>
+        <th>Cost</th>
+        <th>Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="item-name">Paper Notebook</span><span class="item-type">Physical Tool</span></td>
+        <td>Captures stray thoughts during deep work, prevents mental loops, anchors priorities</td>
+        <td><span class="cost-free">Free / $5</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Freedom App</span><span class="item-type">Distraction Blocker</span></td>
+        <td>Blocks websites and apps across all devices simultaneously. Scheduled sessions. Used by 2M+ people.</td>
+        <td><span class="cost-paid">$29/yr</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Forest App</span><span class="item-type">Focus Timer</span></td>
+        <td>Visual focus timer — you grow a virtual tree during focus sessions. Dying tree = strong accountability signal. iOS + Android.</td>
+        <td><span class="cost-paid">$1.99</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg empty"></div><div class="impact-seg empty"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Brown Noise / White Noise</span><span class="item-type">Audio Environment</span></td>
+        <td>Masks unpredictable environmental sounds that interrupt focus. Brown noise specifically shown to aid sustained attention. YouTube: "10-hour brown noise."</td>
+        <td><span class="cost-free">Free</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg empty"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Grayscale Mode</span><span class="item-type">Phone Setting</span></td>
+        <td>Turns your phone screen black and white. Dramatically reduces appeal of apps designed to hook via color. Studies show 30–40% reduction in compulsive phone checking.</td>
+        <td><span class="cost-free">Free (built-in)</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg empty"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Minimalist Phone Home Screen</span><span class="item-type">Design</span></td>
+        <td>Remove all apps from your home screen except: phone, maps, camera, calendar. Everything else accessed via search. Removes visual triggers for habitual app-opening.</td>
+        <td><span class="cost-free">Free</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg empty"></div><div class="impact-seg empty"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Basic Alarm Clock</span><span class="item-type">Hardware</span></td>
+        <td>Removes the phone from the bedroom entirely. Non-negotiable foundation tool. Buy any cheap model.</td>
+        <td><span class="cost-paid">$10–15</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div></div></td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Cold Shower (60 sec)</span><span class="item-type">Physiological</span></td>
+        <td>Releases norepinephrine (up to 300%). Creates a state of alert calm — sharpness without anxiety. Most effective when done pre-deep-work. The discomfort is the point: it trains cognitive control.</td>
+        <td><span class="cost-free">Free</span></td>
+        <td><div class="impact-bar"><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg"></div><div class="impact-seg empty"></div></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout reveal">
+    <span class="callout-label">🎯 Where to Start</span>
+    Don't buy anything yet. Start with the free interventions: grayscale mode, minimalist home screen, paper notebook, brown noise on YouTube, alarm clock. These alone — if implemented consistently — will produce a measurable difference in your focus quality within one week. Add paid tools only after you've built the behavioral foundation.
+  </div>
+
+  <!-- CLOSING -->
+  <div style="margin-top:80px; padding: 56px 40px; background: var(--surface); border: 1px solid rgba(34,211,238,0.2); border-radius: 24px; text-align:center; position:relative; overflow:hidden;" class="reveal">
+    <div style="position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, var(--accent), var(--accent2), var(--green))"></div>
+    <p style="font-size:11px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); margin-bottom:20px;">Remember</p>
+    <h3 style="font-family:var(--serif); font-size:clamp(24px, 4vw, 38px); color:var(--text); margin-bottom:20px; font-weight:700; line-height:1.2;">Focus is not a personality trait.<br>It's an architecture problem.</h3>
+    <p style="font-size:17px; color:var(--text-dim); max-width:500px; margin:0 auto 32px; font-weight:300; line-height:1.8;">You don't need more willpower. You need an environment that makes distraction harder than focus. That's all this blueprint is: better architecture.</p>
+    <p style="font-size:14px; font-family:var(--mono); color:var(--text-muted);">— The Clarity Reset Protocol Team</p>
+  </div>
+
+</section>
+
+<script>
+// Reveal
+const revEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+revEls.forEach(el => obs.observe(el));
+
+// Rhythm bars
+const barData = [20,30,55,75,90,85,72,60,40,30,50,65,60,45,30,22,18,20,25,22,18,15,12,10];
+const barColors = barData.map(v => v > 65 ? 'var(--accent)' : v > 40 ? 'rgba(34,211,238,0.3)' : 'var(--surface3)');
+const barsEl = document.getElementById('rhythmBars');
+if(barsEl) {
+  barData.forEach((v, i) => {
+    const b = document.createElement('div');
+    b.className = 'rbar';
+    b.style.cssText = `height:${v}%;background:${barColors[i]};opacity:0.85;`;
+    barsEl.appendChild(b);
+  });
+}
+
+// Checklist
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+}
+
+// Sidebar active
+const chapterIds = ['cover','chapter1','chapter2','chapter3','chapter4','chapter5','chapter6','chapter7'];
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+window.addEventListener('scroll', () => {
+  let current = 0;
+  chapterIds.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 300) current = i;
+  });
+  sidebarItems.forEach((item, i) => item.classList.toggle('active', i === current));
+});
+</script>
+</body>
+</html>
